@@ -1,3 +1,4 @@
+// Request parameters for FoursquareAPI
 const api = 'https://api.foursquare.com/v2/venues/search?';
 const ll = '40.712775,-74.005973';
 const oauth_token = 'QII01GK3TGA5SOUTHGMGSF22IHXKFWK1CCG5AR3K5QKLS2QJ';
@@ -17,6 +18,7 @@ const DefaultLocationRequest = `${api}ll=${ll}&limit=${limit}&categoryId=${categ
   .match(/\s(\w+)]/)[1]
   .toLowerCase() === type
 
+// Default locations Request
 export const getDefaultLocations = () =>
   fetch(`${DefaultLocationRequest}`)
     .then(res => {
@@ -46,6 +48,7 @@ export const getDefaultLocations = () =>
       alert(err);
     })
 
+// Request location by name
 export const searchLocations = (query) =>
   fetch(`${DefaultLocationRequest}&query=${query}`)
   .then(res => {

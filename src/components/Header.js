@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 
-// const Header = <FontAwesomeIcon icon={faCoffee} />
-
-
 
 class Header extends Component {
   render() {
@@ -14,7 +11,7 @@ class Header extends Component {
           role='Button'
           aria-label='Menu button'
           tabIndex='1'
-          onKeyDown={(evt)=>{(evt.key === 'Enter') && (this.props.toggleSideBarClass())}} 
+          onKeyDown={(evt)=>{(evt.key === 'Enter') && (this.props.toggleSideBarClass())}}
           onClick={() => this.props.toggleSideBarClass()}
         >
           <FontAwesomeIcon icon={faBars} size='2x'/>

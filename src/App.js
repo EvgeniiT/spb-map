@@ -11,7 +11,7 @@ class App extends Component {
     locations: [],
     sideBarClass: 'Side-Bar-Closed'
   }
-
+  // Helper function for type detecting
   is = (item, type) =>
   	Object
   	.prototype
@@ -21,22 +21,24 @@ class App extends Component {
 
   componentDidMount() {
     LocationsAPI.getDefaultLocations().then( l => {
-      console.log(l);
       (this.is(l, 'array')) && this.setState({ locations: l });
     });
   }
 
+  // Toggle side bar visibility
   toggleSideBarClass = () => {
     (this.state.sideBarClass === 'Side-Bar-Closed') ? (this.setState({ sideBarClass: 'Side-Bar' })) :
     (this.setState({ sideBarClass: 'Side-Bar-Closed' }));
   }
 
+  // Use text query for filtering search results
   searchLocations = (query) => {
     LocationsAPI.searchLocations(query).then( l => {
       (this.is(l, 'array')) && this.setState({ locations: l })
     });
   }
 
+  // Toggle flag for infoWindow
   toggleIsOpen = (location) => {
     const locationsIDs = this.state.locations.map(l => l.id);
     if (locationsIDs.indexOf(location.id) !== -1) {
