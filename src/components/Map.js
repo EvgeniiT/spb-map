@@ -1,55 +1,72 @@
-import React, { Component } from 'react';
-import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps';
+import React, { Component } from "react"
+import { compose, withProps, lifecycle } from "recompose"
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
 
-// const markers = [
-//   { lat: 40.756795, lng: -73.954298, text: 'Hi', isOpen: false },
-//   { lat: 41.76, lng: -72.97, text: 'my', isOpen: true },
-//   { lat: 41.44, lng: -73.5, text: 'cool markers!', isOpen: false}
-// ]
-//
+const MyMap = compose(
+  lifecycle({
+    componentDidCatch(error, info) {
+      console.log(error, info);
+    }
+  }),
+  withProps({
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBhvEsTlzkQOtJQCfJa0D2kJ96a1LcNnLU",
+    loadingElement: <div style={{ height: `90vh` }} />,
+    containerElement: <div style={{ height: `90vh`, width: '100%' }} />,
+    mapElement: <div style={{ height: `100%` }} />,
+  }),
+  withScriptjs,
+  withGoogleMap
+)((props) =>
 
+  <GoogleMap
+    defaultCenter = { { lat: 40.712775, lng: -74.005973 } }
+    defaultZoom = { 13 }
+  >
+  {
+    props.locations.map( l => (
+      <Marker
+        key = {l.id}
+        position = {{ lat: l.lat, lng: l.lng }}
+        icon = {l.icon}
+        onClick = {() => props.onToggleIsOpen(l)}
+      >
+        {l.isOpen &&
+          <InfoWindow
+            onCloseClick = {evt => props.onToggleIsOpen(l)}
+          >
+            <div className='Info-Window-Content'>
+              <h1>{l.text}</h1>
+            </div>
+          </InfoWindow>
+        }
+      </Marker>
+    ))
+  }
+  </GoogleMap>
 
-
-
-
-
+)
 
 class Map extends Component {
 
-   render() {
-     const {locations, onToggleIsOpen} = this.props;
-     const MyMap = withGoogleMap(props => (
-        <GoogleMap
-          defaultCenter = { { lat: 40.756795, lng: -73.954298 } }
-          defaultZoom = { 13 }
-        >
-        {
-          locations.map( l => (
-            <Marker
-            position={{ lat: l.lat, lng: l.lng }}
-            onClick = {(evt) => onToggleIsOpen(l)}
-            >
-              {l.isOpen &&
-                <InfoWindow>
-                  <div>
-                    <h1>{l.text}</h1>
-                  </div>
-                </InfoWindow>
-              }
-            </Marker>
-          ))
-        }
+  render() {
+    const {locations, onToggleIsOpen} = this.props;
+    return (
+      <div
+        aria-hidden = 'true'
+        style={{ height: 350,
+        width: '100%',
+        display: 'flex',
+        flexFlow: 'row nowrap',
+        justifyContent: 'center',
+        padding: 0 }}
+      >
+        <MyMap
+          locations = {locations}
+          onToggleIsOpen = {onToggleIsOpen}
+        />
+      </div>
+    )
+  }
+}
 
-        </GoogleMap>
-     ))
-     return(
-        <div>
-          <MyMap
-            containerElement={ <div style={{ height: `100vh`, width: '100%' }} /> }
-            mapElement={ <div style={{ height: `100%` }} /> }
-          />
-        </div>
-     );
-   }
-};
 export default Map;
