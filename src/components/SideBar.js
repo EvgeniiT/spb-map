@@ -11,8 +11,7 @@ class SideBar extends Component {
   	.toLowerCase() === type
 
   state = {
-    query: '',
-    filteredLocations: []
+    query: ''
   }
 
   updateQuery = (q) => {
@@ -21,7 +20,7 @@ class SideBar extends Component {
   }
 
   render() {
-    const {locations, onToggleIsOpen, sideBarClass} = this.props
+    const {locations, onToggleIsOpen, sideBarClass, errObj} = this.props
     const {query} = this.state
     return (
       <div>
@@ -36,6 +35,13 @@ class SideBar extends Component {
               return this.updateQuery(evt.target.value);}}
           />
         </div>
+
+        {(errObj.isError) &&
+          <div className='Side-Bar-Request-Error'>
+            <h3>{errObj.errText.toString()}</h3>
+            <a href="https://developer.foursquare.com/docs/api/troubleshooting/errors">Please check Foursquare API docs</a>
+          </div>
+        }
 
         {(query.length !== 0 && locations.length === 0) ?
           <div className='Side-Bar-No-Result'>

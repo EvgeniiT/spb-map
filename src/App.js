@@ -9,7 +9,8 @@ import * as LocationsAPI from './components/LocationsAPI'
 class App extends Component {
   state = {
     locations: [],
-    sideBarClass: 'Side-Bar-Closed'
+    sideBarClass: 'Side-Bar-Closed',
+    errObj: {}
   }
   // Helper function for type detecting
   is = (item, type) =>
@@ -21,7 +22,11 @@ class App extends Component {
 
   componentDidMount() {
     LocationsAPI.getDefaultLocations().then( l => {
-      (this.is(l, 'array')) && this.setState({ locations: l });
+      if (l.isError) {
+        this.setState({ errObj: l });
+      } else {
+        (this.is(l, 'array')) && this.setState({ locations: l, errObj: {} });
+      }
     });
   }
 
@@ -34,7 +39,11 @@ class App extends Component {
   // Use text query for filtering search results
   searchLocations = (query) => {
     LocationsAPI.searchLocations(query).then( l => {
-      (this.is(l, 'array')) && this.setState({ locations: l })
+      if (l.isError) {
+        this.setState({ errObj: l });
+      } else {
+        (this.is(l, 'array')) && this.setState({ locations: l, errObj: {} });
+      }
     });
   }
 
@@ -65,6 +74,7 @@ class App extends Component {
             onToggleIsOpen={this.toggleIsOpen}
             searchLocations={this.searchLocations}
             sideBarClass={this.state.sideBarClass}
+            errObj={this.state.errObj}
           />
         </div>
         <Map aria-label="Map" locations={this.state.locations} onToggleIsOpen={this.toggleIsOpen}/>

@@ -44,8 +44,12 @@ export const getDefaultLocations = () =>
       }
     })
     .catch(err => {
-      console.log(err);
+      console.log(err.status);
       alert(err);
+      return {
+        isError: true,
+        errText: err
+      };
     })
 
 // Request location by name
@@ -76,4 +80,8 @@ export const searchLocations = (query) =>
   .catch(err => {
     console.log(err);
     alert(err);
+    return {
+      isError: true,
+      errText: err
+    };
   })
